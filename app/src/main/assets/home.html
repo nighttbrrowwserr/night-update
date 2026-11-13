@@ -1,0 +1,18 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#000;color:#eee;font:16px system-ui;padding:20px 16px}button,input{font:inherit}button{background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:14px;padding:12px 16px}input[type=text],input[type=search]{width:100%;padding:14px 18px;border-radius:26px;border:1px solid #333;background:#111;color:#fff}
+body{display:flex;flex-direction:column;align-items:center;min-height:100vh;background:var(--bg,#000)}img{width:84px;transition:transform .5s}img:active{transform:rotate(-90deg)}#t{font-size:56px;font-weight:200;margin:14px 0 0}#d{opacity:.6;margin-bottom:22px}form{width:100%;max-width:520px}#g{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%;max-width:520px;margin-top:28px}.s{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:#ccc;text-decoration:none;text-align:center;overflow:hidden}.s b{width:56px;height:56px;border-radius:18px;background:#161616;border:1px solid #2a2a2a;display:grid;place-items:center;font-size:22px;color:var(--ac,#fff)}#p{display:none;width:100%;max-width:520px;margin-top:24px;background:#0d0d0d;border:1px solid #222;border-radius:18px;padding:16px}#p label{display:flex;justify-content:space-between;align-items:center;margin:8px 0}</style>
+<img src=logo.png><div id=t></div><div id=d></div>
+<form action=https://duckduckgo.com/><input type=search name=q placeholder="Rechercher avec DuckDuckGo"></form>
+<div id=g></div>
+<p><button onclick="p.style.display=p.style.display=='block'?'none':'block'">Réglages</button> <button onclick="a()">Ajouter un raccourci</button></p>
+<div id=p><label>Fond <input type=color id=cb></label><label>Accent <input type=color id=ca></label><label>Afficher l'heure <input type=checkbox id=ct checked></label><small>Appui long sur un raccourci : le supprimer.</small></div>
+<script>
+var L=localStorage,S=JSON.parse(L.sc||'[["Night Mail","mail.html"],["Night Music","music.html"],["Wikipedia","https://fr.wikipedia.org"],["YouTube","https://m.youtube.com"]]');
+function sv(){L.sc=JSON.stringify(S);r()}
+function r(){g.innerHTML='';S.forEach(function(x,i){var e=document.createElement('a');e.className='s';e.href=x[1];e.innerHTML='<b>'+x[0][0].toUpperCase()+'</b>'+x[0].replace(/</g,'');var h;e.ontouchstart=function(){h=setTimeout(function(){if(confirm('Supprimer '+x[0]+' ?')){S.splice(i,1);sv()}},700)};e.ontouchend=e.ontouchmove=function(){clearTimeout(h)};g.appendChild(e)})}
+function a(){var n=prompt('Nom du raccourci'),u=n&&prompt('Adresse (https://...)');if(u){S.push([n,/^https?:/.test(u)?u:'https://'+u]);sv()}}
+function th(){document.documentElement.style.setProperty('--bg',L.bg||'#000');document.documentElement.style.setProperty('--ac',L.ac||'#fff');t.style.display=d.style.display=L.ct=='0'?'none':'block'}
+cb.value=L.bg||'#000000';ca.value=L.ac||'#ffffff';ct.checked=L.ct!='0';
+cb.oninput=function(){L.bg=cb.value;th()};ca.oninput=function(){L.ac=ca.value;th()};ct.onchange=function(){L.ct=ct.checked?1:0;th()};
+function k(){var n=new Date();t.textContent=n.toLocaleTimeString('fr',{hour:'2-digit',minute:'2-digit'});d.textContent=n.toLocaleDateString('fr',{weekday:'long',day:'numeric',month:'long'})}
+k();setInterval(k,10000);th();r();
+</script>

@@ -1,0 +1,15 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#000;color:#eee;font:16px system-ui;padding:20px 16px}button,input{font:inherit}button{background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:14px;padding:12px 16px}input[type=text],input[type=search]{width:100%;padding:14px 18px;border-radius:26px;border:1px solid #333;background:#111;color:#fff}
+.m{border:1px solid #222;border-radius:14px;padding:12px;margin:10px 0;background:#0d0d0d}.m small{opacity:.6}#a{font-size:18px;word-break:break-all;margin:14px 0}</style>
+<h2>Night Mail</h2><p style="opacity:.6">Adresse temporaire de 5 minutes (mail.tm).</p>
+<button onclick="mk()">Nouvelle adresse</button> <button onclick="cp()">Copier</button>
+<div id=a>...</div><div id=c></div><div id=l></div>
+<script>
+var A='https://api.mail.tm',tk,ex,id=0;
+function q(m,u,b){return fetch(A+u,{method:m,headers:{'Content-Type':'application/json',Authorization:tk?'Bearer '+tk:''},body:b?JSON.stringify(b):undefined}).then(function(r){return r.status==204?{}:r.json()})}
+function rd(n){var s='';while(n--)s+='abcdefghijklmnopqrstuvwxyz0123456789'[Math.random()*36|0];return s}
+async function mk(){clearInterval(id);a.textContent='Création...';l.innerHTML='';try{var d=(await q('GET','/domains'))['hydra:member'][0].domain,ad=rd(10)+'@'+d,pw=rd(14);await q('POST','/accounts',{address:ad,password:pw});tk=(await q('POST','/token',{address:ad,password:pw})).token;a.textContent=ad;ex=Date.now()+3e5;id=setInterval(tick,4000);tick()}catch(e){a.textContent='Erreur : '+e}}
+async function tick(){var s=Math.max(0,(ex-Date.now())/1e3|0);c.textContent='Expire dans '+(s/60|0)+':'+('0'+s%60).slice(-2);if(!s){clearInterval(id);tk=0;a.textContent='Adresse expirée';return}
+ var m=(await q('GET','/messages'))['hydra:member']||[];l.innerHTML=m.length?'':'<small>Aucun message pour le moment.</small>';m.forEach(function(x){var e=document.createElement('div');e.className='m';e.innerHTML='<b></b><br><small></small>';e.firstChild.textContent=x.subject||'(sans objet)';e.lastChild.textContent=x.from.address;e.onclick=async function(){var f=await q('GET','/messages/'+x.id);e.innerHTML='';var t=document.createElement('pre');t.style.whiteSpace='pre-wrap';t.textContent=f.text||'';e.appendChild(t);var z=(f.text||'').match(/\b\d{4,8}\b/);if(z){var b=document.createElement('button');b.textContent='Copier le code '+z[0];b.onclick=function(ev){ev.stopPropagation();navigator.clipboard.writeText(z[0])};e.appendChild(b)}};l.appendChild(e)})}
+function cp(){navigator.clipboard.writeText(a.textContent)}
+mk();
+</script>

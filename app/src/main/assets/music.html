@@ -1,0 +1,18 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#000;color:#eee;font:16px system-ui;padding:20px 16px}button,input{font:inherit}button{background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:14px;padding:12px 16px}input[type=text],input[type=search]{width:100%;padding:14px 18px;border-radius:26px;border:1px solid #333;background:#111;color:#fff}
+#cv{width:min(70vw,280px);aspect-ratio:1;border-radius:22px;display:block;margin:12px auto;background:#111 center/60% no-repeat url(logo.png)}#n{text-align:center;font-size:18px;min-height:26px}input[type=range]{width:100%}.r{display:flex;gap:8px;justify-content:center;margin:12px 0}.r button{flex:1;padding:14px 0}.on{background:#fff;color:#000}li{padding:12px;border-bottom:1px solid #1c1c1c;list-style:none}li.c{color:#fff;font-weight:600}ul{padding:0;margin:0;opacity:.85}</style>
+<div id=cv></div><div id=n>Night Music</div><input type=range id=s value=0 max=1000><div style="display:flex;justify-content:space-between;font-size:12px;opacity:.6"><span id=a>0:00</span><span id=b>0:00</span></div>
+<div class=r><button id=sh>Aléa</button><button id=pv>Préc.</button><button id=pl>Lecture</button><button id=nx>Suiv.</button><button id=rp>Boucle</button></div>
+<input type=range id=v max=1 step=.01 value=1><p><button onclick="f.click()">Ajouter des musiques</button></p><input type=file id=f accept="audio/*" multiple hidden><ul id=u></ul>
+<audio id=o></audio>
+<script>
+var T=[],i=-1,sh=0,rp=0;function m(x){return(x/60|0)+':'+('0'+(x%60|0)).slice(-2)}
+f.onchange=function(){[].forEach.call(f.files,function(x){T.push({n:x.name.replace(/\.[^.]+$/,''),u:URL.createObjectURL(x)})});dr();if(i<0)p(0)};
+function dr(){u.innerHTML='';T.forEach(function(x,k){var e=document.createElement('li');e.textContent=x.n;if(k==i)e.className='c';e.onclick=function(){p(k)};u.appendChild(e)})}
+function p(k){if(!T.length)return;i=(k+T.length)%T.length;o.src=T[i].u;o.play();n.textContent=T[i].n;dr();if('mediaSession'in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:T[i].n,artist:'Night Music'})}
+function nx(){p(sh?Math.random()*T.length|0:i+1)}
+pl.onclick=function(){o.paused?o.play():o.pause()};nx_=nx;nx.onclick=null;document.getElementById('nx').onclick=nx;pv.onclick=function(){p(i-1)};
+sh_=sh;document.getElementById('sh').onclick=function(){sh^=1;this.classList.toggle('on')};rp_=rp;document.getElementById('rp').onclick=function(){rp^=1;this.classList.toggle('on')};
+o.onended=function(){rp?(o.currentTime=0,o.play()):nx()};o.onplay=function(){pl.textContent='Pause'};o.onpause=function(){pl.textContent='Lecture'};
+o.ontimeupdate=function(){if(o.duration){s.value=o.currentTime/o.duration*1000;a.textContent=m(o.currentTime);b.textContent=m(o.duration)}};
+s.oninput=function(){o.currentTime=s.value/1000*o.duration};v.oninput=function(){o.volume=v.value};
+</script>

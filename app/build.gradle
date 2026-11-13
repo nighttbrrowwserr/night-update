@@ -1,0 +1,10 @@
+plugins{id 'com.android.application'}
+android{namespace 'com.night.browser';compileSdk 34
+ buildFeatures{buildConfig true}
+ defaultConfig{applicationId 'com.night.browser';minSdk 24;targetSdk 34
+  versionCode (project.findProperty('vCode') ?: '1') as int
+  versionName '2.5.9-mobile'
+  buildConfigField 'String','FEED','"' + (project.findProperty('feedUrl') ?: '') + '"'}
+ signingConfigs{debug{storeFile file('night.jks');storePassword 'nightnight';keyAlias 'night';keyPassword 'nightnight'}}
+ buildTypes{debug{signingConfig signingConfigs.debug}}
+ compileOptions{sourceCompatibility JavaVersion.VERSION_17;targetCompatibility JavaVersion.VERSION_17}}

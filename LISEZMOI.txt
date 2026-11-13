@@ -1,0 +1,12 @@
+NIGHT MOBILE (apk) - version telephone de night 2.5.9
+Navigateur (onglets, onglet prive, DuckDuckGo, telechargements), accueil personnalisable, Night Mail, Night Music,
+Night code (menu > Night code : mots de passe chiffres AES dans l'Android Keystore ; "Enregistrer depuis cette page" demande confirmation ; appui sur une entree = remplir / copier / supprimer),
+Stream proof (menu > Stream proof : la fenetre de night devient noire en capture d'ecran, enregistrement et partage d'ecran).
+
+OBTENIR L'APK ET LES MISES A JOUR AUTOMATIQUES
+1. Cree un depot GitHub PUBLIC, envoie TOUT le contenu de ce dossier (y compris .github et app/night.jks).
+2. Onglet Actions : le workflow "apk" se lance a chaque envoi (~3 min). A la fin, la page Releases du depot contient night.apk et latest-android.json.
+3. Premiere installation : telecharge night.apk depuis Releases sur le telephone, ouvre-le, autorise les sources inconnues.
+4. Mises a jour : chaque fois que tu envoies de nouveaux fichiers sur GitHub, une nouvelle version est construite. night verifie au demarrage puis toutes les 6 h,
+   propose "Mettre a jour", telecharge et ouvre l'installation (Android demande une confirmation, impossible a supprimer sans acces root).
+Ne perds pas app/night.jks : c'est la signature, sans elle les mises a jour ne s'installent pas par-dessus l'ancienne version.
